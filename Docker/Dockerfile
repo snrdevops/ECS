@@ -1,19 +1,3 @@
-FROM ubuntu:12.04
+wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; 
+oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz"
 
-# Install dependencies
-RUN apt-get update -y
-RUN apt-get install -y apache2
-
-# Install apache and write hello world message
-RUN echo "Hello World!" > /var/www/index.html
-
-# Configure apache
-RUN a2enmod rewrite
-RUN chown -R www-data:www-data /var/www
-ENV APACHE_RUN_USER www-data
-ENV APACHE_RUN_GROUP www-data
-ENV APACHE_LOG_DIR /var/log/apache2
-
-EXPOSE 80
-
-CMD ["/usr/sbin/apache2", "-D",  "FOREGROUND"]
