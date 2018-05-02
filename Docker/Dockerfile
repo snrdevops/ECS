@@ -1,20 +1,19 @@
-# Use an official Python runtime as a parent image
-FROM python:2.7-slim
+FROM ubuntu:12.04
 
-# Set the working directory to /app
-WORKDIR /app
+# Install dependencies
+RUN apt-get update -y
+RUN apt-get install -y apache2
 
-# Copy the current directory contents into the container at /app
-ADD . /app
+# Install apache and write hello world message
+RUN echo "Hello World!" > /var/www/index.html
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Configure apache
+RUN a2enmod rewrite
+RUN chown -R www-data:www-data /var/www
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
-# Make port 80 available to the world outside this container
 EXPOSE 80
 
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["/usr/sbin/apache2", "-D",  "FOREGROUND"]
